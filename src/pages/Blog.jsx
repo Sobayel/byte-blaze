@@ -1,10 +1,20 @@
 import { useState } from "react";
-import { Link, Outlet, useLoaderData } from "react-router-dom";
+import { Link, Outlet, useLoaderData, useNavigation } from "react-router-dom";
+import Loader from "../components/Loader";
+import { MdBookmarkAdd } from "react-icons/md";
+import { saveBlog } from "../utils";
 
 const Blog = () => {
     const [tabIndex, setTabIndex] = useState(0)
     const blog = useLoaderData()
+    const navigation = useNavigation()
     const {comments_count, title, reading_time_minutes, public_reactions_count,published_at} = blog;
+
+    const handleBookmark = blog =>{
+        saveBlog(blog)
+    }
+
+    if(navigation.state ==='loading') return <Loader></Loader>
     return (
         <div className="max-w-3xl px-6 py-16 mx-auto space-y-12">
 	<article className="space-y-8 dark:bg-gray-100 dark:text-gray-900">
@@ -35,6 +45,10 @@ const Blog = () => {
 		</svg>
 		<span>Author</span>
 	</Link>
+        <div onClick={() => handleBookmark(blog)} className="bg-primary p-3 ml-5 rounded-full hover:bg-opacity-30 bg-opacity-20 cursor-pointer hover:scale-105 overflow-hidden">
+           <MdBookmarkAdd size={20} className='text-secondary'></MdBookmarkAdd>
+        </div>
+
 </div>
 		</div>
 	</article>
